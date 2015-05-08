@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+  <head>
+    <title>
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/ui-base.css">
+    <link rel="stylesheet" href="css/ui-box.css">
+    <link rel="stylesheet" href="css/ui-color.css">
+	<link rel="stylesheet" href="css/ui-res.css">
+    <link rel="stylesheet" href="css/ui-btn.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/zy_control.js">
+    </script>
+    <script src="js/zy_click.js">
+    </script>
+    <script type="text/javascript">
+		var cText = 0;
+var cJson = 1;
+var cInt = 2;
+
+	window.uexOnload = function(){
+		uexControl.cbOpenDatePicker=function(opCode,dataType,data){
+			switch(dataType){
+				case cText:
+				  alert("uex.cText");
+				  break;
+				case cJson:
+				  if(dataType==1){
+				    var obj = eval('('+data+')');
+				    document.getElementById('date').innerHTML ="年：" +obj.year+"<br>月："+obj.month+"<br>日："+obj.day;
+			    }
+			    break;
+			  case cInt:
+			    alert("uex.cInt");
+			    break;
+			  default:
+			    alert("error");
+				}
+			
+		};
+		uexControl.cbOpenDatePickerWithoutDay=function(opCode,dataType,data){
+			switch(dataType){
+				case cText:
+				  alert("uex.cText");
+				  break;
+				case cJson:
+				  if(dataType==1){
+				    var obj = eval('('+data+')');
+				    document.getElementById('yearAndMonth').innerHTML ="年：" +obj.year+"<br>月："+obj.month;
+			    }
+			    break;
+			  case cInt:
+			    alert("uex.cInt");
+			    break;
+			  default:
+			    alert("error");
+				}	
+		};
+		uexControl.cbOpenTimePicker=function(opCode,dataType,data){
+			switch(dataType){
+				case cText:
+				  alert("uex.cText");
+				  break;
+				case cJson:
+				  if(dataType==1){
+				    var obj = eval('('+data+')');
+				    document.getElementById('systime').innerHTML ="小时：" +obj.hour+"<br>分钟："+obj.minute+"<br>";	
+			    }
+			    break;
+			  case cInt:
+			    alert("uex.cInt");
+			    break;
+			  default:
+			    alert("error");
+				}
+			
+		};
+        uexControl.cbOpenInputDialog=function(opCode,dataType,data){
+            switch(dataType){
+              case cText:
+                alert(data);
+                break;
+              case cJson:
+                alert("uex.cJson");
+                break;
+              case cInt:
+                alert("uex.cInt");
+                break;
+              default:
+                alert("error");
+            }
+       };
+	}
+		
+	function inputdlg(){
+		var inputdlgT=document.getElementById('inputdlgType').value;
+		var inputdlgD=document.getElementById('inputdlgData').value;
+		var inputdlgB=document.getElementById('inputdlgBtn').value;
+        setTimeout(function(){uexControl.openInputDialog(inputdlgT,inputdlgD,inputdlgB);},100);
+	}
+		</script>
+  </head>
+<body class="um-vp " ontouchstart>
+<div class="tit">Control</div>
+	<div class="conbor">
+		<div class="consj">
+			<span>1.打开日期</span>
+			年份：<input class="textbox" type="text" value="1900" id="addYear"><br>
+			月份：<input class="textbox" type="text" value="10" id="addMonth"><br>
+			天数：<input class="textbox" type="text" value="19" id="addDay"><br>
+			<input class="btn" type="button" value="打开日期" onclick="uexControl.openDatePicker(document.getElementById('addYear').value,document.getElementById('addMonth').value,document.getElementById('addDay').value);">
+			<span>日期为：</span>
+			<div class="tcxx" id="date"></div>
+			<span>2.打开年月</span>
+			年份：<input class="textbox" type="text" value="1900" id="year"><br>
+			月份：<input class="textbox" type="text" value="10" id="month"><br>
+			<input class="btn" type="button" value="打开年月" onclick="uexControl.openDatePickerWithoutDay(document.getElementById('year').value,document.getElementById('month').value);">
+			<span>年月为：</span>
+			<div class="tcxx" id="yearAndMonth"></div>
+			<span>3.打开时间</span>
+			小时：<input class="textbox" type="text" value="10" id="addHour"><br>
+			分钟：<input class="textbox" type="text" value="10" id="addMinute"><br>
+			<input class="btn" type="button" value="打开时间" onclick="uexControl.openTimePicker(document.getElementById('addHour').value,document.getElementById('addMinute').value);">
+                
+			<span>时间为：</span>
+			<div class="tcxx" id="systime"></div>
+            	
+	        <span>4.输入框测试</span>
+	        <span>输入框类型：0为标准键盘；1为数字键盘;其他视为标准</span> 
+			<input class="textbox"id="inputdlgType" type="text" value="0"> 
+			<span>输入框内默认数据</span> 
+			<input class="textbox"id="inputdlgData" type="text" value="默认数据"> 
+			<span>按钮内容为</span> 
+			<input class="textbox"id="inputdlgBtn" type="text" value="按钮"> 
+	        <input class="btn" type="button" value="打开输入框" onclick="inputdlg();">					
+		</div>
+	</div>
+</body>
+</html>

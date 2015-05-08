@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<uexplugins>
+
+    <plugin
+        className="org.zywx.wbpalmstar.plugin.uexcontrol.EUExControl"
+        uexName="uexControl" version="3.0" build="0">
+        <method name="openDatePicker" />
+        <method name="openTimePicker" />
+        <method name="openInputDialog" />
+        <method name="openDatePickerWithoutDay" />
+    </plugin>
+    
+</uexplugins>

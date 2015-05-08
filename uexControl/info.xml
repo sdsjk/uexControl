@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<uexplugins>
+    <plugin
+        uexName="uexControl" version="3.0.4" build="4">
+        <info>4:新增接口openDatePickerWithoutDay</info>
+        <build>3:修改不显示当前日期问题</build>
+        <build>2:增加弹出输入框输入完成的回调方法cbOpenInputDialog</build>
+        <build>1:修改魅族手机点击日期和软键盘同时弹出问题</build>
+        <build>0:时间日期选择功能插件</build>
+    </plugin>
+</uexplugins>

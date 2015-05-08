@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+ 
+   <string name="plugin_control_date_input_error">日期输入错误！</string>
+   <string name="plugin_control_time_input_error">时间输入错误！</string> 
+
+</resources>

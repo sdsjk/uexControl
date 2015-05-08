@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+
+    <style name="Anim_plugin_control_input_dialog" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/plugin_control_inputdialog_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/plugin_control_inputdialog_exit_anim</item>
+    </style>
+    
+</resources>
