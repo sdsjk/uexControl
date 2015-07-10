@@ -98,7 +98,8 @@ var cInt = 2;
 		var inputdlgT=document.getElementById('inputdlgType').value;
 		var inputdlgD=document.getElementById('inputdlgData').value;
 		var inputdlgB=document.getElementById('inputdlgBtn').value;
-        setTimeout(function(){uexControl.openInputDialog(inputdlgT,inputdlgD,inputdlgB);},100);
+		var bgParm1='{"dialogBg":"#ffffff","dialogETBg":"res://plugin_uexcontrol_edittext_bg.png","dialogButBg":"res://plugin_uexcontrol_button.png"}';
+        setTimeout(function(){uexControl.openInputDialog(inputdlgT,inputdlgD,inputdlgB,bgParm1);},100);
 	}
 		</script>
   </head>
@@ -133,7 +134,7 @@ var cInt = 2;
 			<span>输入框内默认数据</span> 
 			<input class="textbox"id="inputdlgData" type="text" value="默认数据"> 
 			<span>按钮内容为</span> 
-			<input class="textbox"id="inputdlgBtn" type="text" value="按钮"> 
+			<input class="textbox"id="inputdlgBtn" type="text" value=""> 
 	        <input class="btn" type="button" value="打开输入框" onclick="inputdlg();">					
 		</div>
 	</div>
