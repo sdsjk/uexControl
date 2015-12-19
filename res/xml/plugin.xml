@@ -8,5 +8,6 @@
         <method name="openTimePicker" />
         <method name="openInputDialog" />
         <method name="openDatePickerWithoutDay" />
+        <method name="openDatePickerWithConfig" />
     </plugin>
 </uexplugins>
