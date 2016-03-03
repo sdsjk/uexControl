@@ -1,6 +1,16 @@
 package org.zywx.wbpalmstar.plugin.uexcontrol;
 
-import java.util.Calendar;
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,22 +23,11 @@ import org.zywx.wbpalmstar.plugin.uexcontrol.InputDialog.OnInputFinishCallback;
 import org.zywx.wbpalmstar.plugin.uexcontrol.layout.ConfigLimitDatePickerDialog;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.DateBaseVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.DatePickerConfigVO;
-import org.zywx.wbpalmstar.plugin.uexcontrol.vo.LimitDateVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.ResultDatePickerBaseVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.ResultDatePickerVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.ResultOnErrorVO;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import java.util.Calendar;
 
 public class EUExControl extends EUExBase {
     public static final String CALLBACK_DATEPICKER = "uexControl.cbOpenDatePicker";
@@ -190,7 +189,7 @@ public class EUExControl extends EUExBase {
                 dataVO.isWithoutDay());
         ConfigLimitDatePickerDialog datePickerDialog = new ConfigLimitDatePickerDialog(mContext,
                 dataVO, listener);
-        datePickerDialog.showDatePicker();
+        datePickerDialog.showDatePicker(listener);
     }
 
     private void onErrorCallback(ResultOnErrorVO errorVO) {
@@ -221,6 +220,8 @@ public class EUExControl extends EUExBase {
             result.setDatePickerId(id);
             result.setYear(year);
 
+            InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             callBackPluginJs(JsConst.CALLBACK_OPEN_DATE_PICKER_WITH_CONFIG,
                     DataHelper.gson.toJson(result));
         }
