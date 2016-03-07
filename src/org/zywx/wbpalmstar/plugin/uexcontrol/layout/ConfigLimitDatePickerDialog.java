@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -58,49 +59,50 @@ public class ConfigLimitDatePickerDialog{
 
     public String transMonth(String monthStr) {
         if (monthStr.contains("月")) {
-            return  monthStr.replace('月', ' ').trim();
+            monthStr = monthStr.replace('月', ' ').trim();
         }
-        if (monthStr.equalsIgnoreCase("Jan")) {
+        if (monthStr.equalsIgnoreCase("Jan") || monthStr.equals("一")) {
             return "1";
         }
-        if (monthStr.equalsIgnoreCase("Feb")) {
+        if (monthStr.equalsIgnoreCase("Feb") || monthStr.equals("二")) {
             return "2";
         }
-        if (monthStr.equalsIgnoreCase("Mar")) {
+        if (monthStr.equalsIgnoreCase("Mar") ||  monthStr.equals("三")) {
             return "3";
         }
-        if (monthStr.equalsIgnoreCase("Apr")) {
+        if (monthStr.equalsIgnoreCase("Apr") ||  monthStr.equals("四")) {
             return "4";
         }
-        if (monthStr.equalsIgnoreCase("May")) {
+        if (monthStr.equalsIgnoreCase("May") ||  monthStr.equals("五")) {
             return "5";
         }
-        if (monthStr.equalsIgnoreCase("Jun")) {
+        if (monthStr.equalsIgnoreCase("Jun") ||  monthStr.equals("六")) {
             return "6";
         }
-        if (monthStr.equalsIgnoreCase("Jul")) {
+        if (monthStr.equalsIgnoreCase("Jul") ||  monthStr.equals("七")) {
             return "7";
         }
-        if (monthStr.equalsIgnoreCase("Aug")) {
+        if (monthStr.equalsIgnoreCase("Aug") ||  monthStr.equals("八")) {
             return "8";
         }
-        if (monthStr.equalsIgnoreCase("Sep")) {
+        if (monthStr.equalsIgnoreCase("Sep") ||  monthStr.equals("九")) {
             return "9";
         }
-        if (monthStr.equalsIgnoreCase("Oct")) {
+        if (monthStr.equalsIgnoreCase("Oct") ||  monthStr.equals("十")) {
             return "10";
         }
-        if (monthStr.equalsIgnoreCase("Nov")) {
+        if (monthStr.equalsIgnoreCase("Nov") ||  monthStr.equals("十一")) {
             return "11";
         }
-        if (monthStr.equalsIgnoreCase("Dec")) {
+        if (monthStr.equalsIgnoreCase("Dec") ||  monthStr.equals("十二")) {
             return "12";
         }
-        return "1";
+        return monthStr;
     }
     public void showDatePicker(final ConfigOnDateSetListener listener) {
         boolean isChineseTemp = true;
         Locale local =  mContext.getResources().getConfiguration().locale;
+        Log.i("TAG", "local:" + local.getLanguage());
         if (!local.getLanguage().endsWith("zh")) {
             isChineseTemp = false;
         }
@@ -119,6 +121,7 @@ public class ConfigLimitDatePickerDialog{
                     LimitDateVO maxDate = mData.getMaxDate();
 
                     ViewGroup pickerView = (ViewGroup) ((ViewGroup) datePicker.getChildAt(0)).getChildAt(0);
+
                     for (int i = 0; i < pickerView.getChildCount(); i++) {
                         ViewGroup item = (ViewGroup) pickerView.getChildAt(i);
                         for (int j = 0; j < item.getChildCount(); j++) {
@@ -154,6 +157,7 @@ public class ConfigLimitDatePickerDialog{
                             }
                         }
                     }
+
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
@@ -161,8 +165,9 @@ public class ConfigLimitDatePickerDialog{
 
                     Date date = calendar.getTime();
                     //如果用户选择的日期不在设定的范围内，点击“确定”时会提示"日期超出范围，请重新选择"。同时对话框不会关闭
-//                    Log.i("Date:", date.toString() + "     maxDate:" + new Date(maxDate.getFormatDate()).toString() + "   minDate:" + new Date(minDate.getFormatDate()).toString());
-                    if (date.getTime() > maxDate.getFormatDate() || date.getTime() < minDate.getFormatDate()) {
+                    if ((minDate == null && date.getTime() > maxDate.getFormatDate()) ||
+                            (maxDate == null && date.getTime() < minDate.getFormatDate()) ||
+                            (minDate != null && maxDate != null && (date.getTime() > maxDate.getFormatDate() || date.getTime() < minDate.getFormatDate()) )) {
                         try {
                             Field field = dialog.getClass().getSuperclass().getSuperclass().
                                     getSuperclass().getDeclaredField("mShowing");
@@ -174,7 +179,6 @@ public class ConfigLimitDatePickerDialog{
                             e.printStackTrace();
                         }
                         Toast.makeText(mContext, "日期超出范围，请重新选择", Toast.LENGTH_SHORT).show();
-                        return;
                     } else {
                         try {
                             Field field = dialog.getClass().getSuperclass().getSuperclass().
