@@ -19,6 +19,7 @@ import org.zywx.wbpalmstar.plugin.uexcontrol.vo.DatePickerConfigVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.LimitDateVO;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -164,10 +165,20 @@ public class ConfigLimitDatePickerDialog{
                     calendar.set(Calendar.DAY_OF_MONTH, day);
 
                     Date date = calendar.getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                    int dateVal = Integer.parseInt(sdf.format(new Date(date.getTime())));
+                    int minDateVal = 0;
+                    int maxDateVal = 0;
+                    if (minDate != null) {
+                        minDateVal = Integer.parseInt(sdf.format(new Date(minDate.getFormatDate())));
+                    }
+                    if (maxDate != null) {
+                        maxDateVal = Integer.parseInt(sdf.format(new Date(maxDate.getFormatDate())));
+                    }
                     //如果用户选择的日期不在设定的范围内，点击“确定”时会提示"日期超出范围，请重新选择"。同时对话框不会关闭
-                    if ((minDate == null && date.getTime() > maxDate.getFormatDate()) ||
-                            (maxDate == null && date.getTime() < minDate.getFormatDate()) ||
-                            (minDate != null && maxDate != null && (date.getTime() > maxDate.getFormatDate() || date.getTime() < minDate.getFormatDate()) )) {
+                    if ((minDate == null && dateVal > maxDateVal) ||
+                            (maxDate == null && dateVal < minDateVal) ||
+                            (minDate != null && maxDate != null && (dateVal > maxDateVal || dateVal < minDateVal) )) {
                         try {
                             Field field = dialog.getClass().getSuperclass().getSuperclass().
                                     getSuperclass().getDeclaredField("mShowing");
@@ -207,7 +218,7 @@ public class ConfigLimitDatePickerDialog{
                         e.printStackTrace();
                     }
                     //隐藏键盘
-                    InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mDatePickerDialog.getDatePicker().getWindowToken(), 0);
                 }
             });
