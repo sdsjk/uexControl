@@ -3,6 +3,7 @@ package org.zywx.wbpalmstar.plugin.uexcontrol;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,6 +25,11 @@ public class OverwriteDatePickerDialog extends DatePickerDialog {
 
     @Override
     public void onDateChanged(DatePicker view, int year, int month, int day) {
+        //针对5.0以上系统，采用系统默认的ui.
+        if (Build.VERSION.SDK_INT >= 21) {
+            super.onDateChanged(view, year, month, day);
+            return;
+        }
         DatePicker dp = getDatePicker();
         if (dp != null) {
             ViewGroup pickerView = (ViewGroup) ((ViewGroup) dp.getChildAt(0)).getChildAt(0);
