@@ -3,8 +3,8 @@ package org.zywx.wbpalmstar.plugin.uexcontrol.layout;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfigLimitDatePickerDialog{
     private Context mContext;
@@ -103,7 +105,6 @@ public class ConfigLimitDatePickerDialog{
     public void showDatePicker(final ConfigOnDateSetListener listener) {
         boolean isChineseTemp = true;
         Locale local =  mContext.getResources().getConfiguration().locale;
-        Log.i("TAG", "local:" + local.getLanguage());
         if (!local.getLanguage().endsWith("zh")) {
             isChineseTemp = false;
         }
@@ -120,6 +121,11 @@ public class ConfigLimitDatePickerDialog{
                     int day = 0;
                     LimitDateVO minDate = mData.getMinDate();
                     LimitDateVO maxDate = mData.getMaxDate();
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        System.out.println("Time:" + datePicker.getYear() + "  " + datePicker.getMonth() + "    " + datePicker.getDayOfMonth());
+                        listener.onDateSet(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                        return;
+                    }
 
                     ViewGroup pickerView = (ViewGroup) ((ViewGroup) datePicker.getChildAt(0)).getChildAt(0);
 
@@ -130,27 +136,32 @@ public class ConfigLimitDatePickerDialog{
                             if (childView instanceof EditText) {
                                 EditText editText = (EditText) childView;
                                 String content = editText.getText().toString();
+                                String reqEx = "[^0-9]";
+                                Pattern p = Pattern.compile(reqEx);
+                                Matcher m = p.matcher(editText.getText().toString());
+                                String value = m.replaceAll("").trim();
+
                                 if (!TextUtils.isEmpty(content)) {
                                     switch (i) {
                                         case 0://year
                                             if (isChinese) {
-                                                year = Integer.parseInt(editText.getText().toString());
+                                                year = Integer.parseInt(value);
                                             } else { //如果语言是英文，此处就是  月  了
-                                                month = Integer.parseInt(transMonth(editText.getText().toString())) - 1;
+                                                month = Integer.parseInt(value) - 1;
                                             }
                                             break;
                                         case 1://month
                                             if (isChinese) {
-                                                month = Integer.parseInt(transMonth(editText.getText().toString())) - 1;
+                                                month = Integer.parseInt(value) - 1;
                                             } else { //如果语言是英文，此处就是  日  了
-                                                day = Integer.parseInt(editText.getText().toString());
+                                                day = Integer.parseInt(value);
                                             }
                                             break;
                                         case 2://day
                                             if (isChinese) {
-                                                day = Integer.parseInt(editText.getText().toString());
+                                                day = Integer.parseInt(value);
                                             } else { //如果语言是英文，此处就是  年  了
-                                                year = Integer.parseInt(editText.getText().toString());
+                                                year = Integer.parseInt(value);
                                             }
                                             break;
                                     }
