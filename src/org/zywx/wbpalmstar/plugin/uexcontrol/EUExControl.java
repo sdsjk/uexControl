@@ -35,7 +35,15 @@ public class EUExControl extends EUExBase {
     public static final String CALLBACK_TIMEPICKER = "uexControl.cbOpenTimePicker";
     public static final String CALLBACK_INPUT_COMPLETED = "uexControl.cbInputCompleted";
     public static final String CALLBACK_INPUTDIALOG = "uexControl.cbOpenInputDialog";
-    public static final String CALLBACK_EDIT_COMPLETED = "uexControl.cbEditCompleted";
+
+    //回调函数id
+    public String openDatePickerFuncId;
+    public String openDatePickerWithoutDayFuncId;
+    public String openTimePickerFuncId;
+    public String openInputDialogFuncId;
+
+    private String openDatePickerWithConfigFuncId;
+
 
     String parmBg = ""; // 设置背景参数
 
@@ -45,7 +53,7 @@ public class EUExControl extends EUExBase {
 
     public void openDatePicker(String[] params) {
         int inYear, inMonth, inDay = 0;
-        if (params.length == 3) {
+        if (params.length >= 3) {
             try {
                 inYear = Integer.parseInt(params[0].trim());
                 inMonth = Integer.parseInt(params[1].trim()) - 1;
@@ -65,6 +73,9 @@ public class EUExControl extends EUExBase {
             inYear = calendar.get(Calendar.YEAR);
             inMonth = calendar.get(Calendar.MONTH);
             inDay = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+        if (params.length == 4) {
+            openDatePickerFuncId = params[3];
         }
         Log.i("date", "inYear2=" + inYear + ",inMonth2=" + inMonth + ",inDay2="
                 + inDay);
@@ -96,6 +107,9 @@ public class EUExControl extends EUExBase {
                             jsCallback(CALLBACK_DATEPICKER, 0,
                                     EUExCallback.F_C_JSON,
                                     jsonObject.toString());
+                            if (null != openDatePickerFuncId) {
+                                callbackToJs(Integer.parseInt(openDatePickerFuncId), false, jsonObject);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -114,6 +128,9 @@ public class EUExControl extends EUExBase {
             resultOnErrorVO.setErrorCode(JsConst.ERROR_RESULT_NO_PARAM);
             onErrorCallback(resultOnErrorVO);
             return;
+        }
+        if(params.length == 2) {
+            openDatePickerWithConfigFuncId = params[1];
         }
         DateBaseVO initDate = new DateBaseVO();
         Calendar calendar = Calendar.getInstance();
@@ -224,6 +241,15 @@ public class EUExControl extends EUExBase {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             callBackPluginJs(JsConst.CALLBACK_OPEN_DATE_PICKER_WITH_CONFIG,
                     DataHelper.gson.toJson(result));
+            if (null != openDatePickerWithConfigFuncId) {
+                String str = DataHelper.gson.toJson(result);
+                try {
+                    JSONObject obj = new JSONObject(str);
+                    callbackToJs(Integer.parseInt(openDatePickerWithConfigFuncId), false, obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     private void callBackPluginJs(String methodName, String jsonData){
@@ -234,7 +260,7 @@ public class EUExControl extends EUExBase {
 
     public void openDatePickerWithoutDay(String[] params) {
         int inYear, inMonth = 0;
-        if (params.length == 2) {
+        if (params.length >= 2) {
             try {
                 inYear = Integer.parseInt(params[0].trim());
                 inMonth = Integer.parseInt(params[1].trim());
@@ -251,7 +277,9 @@ public class EUExControl extends EUExBase {
             inYear = calendar.get(Calendar.YEAR);
             inMonth = calendar.get(Calendar.MONTH);
         }
-        Log.i("date", "inYear2=" + inYear + ",inMonth2=" + inMonth);
+        if (params.length == 3) {
+            openDatePickerWithoutDayFuncId = params[2];
+        }
         final int[] dateSet = new int[] { inYear, inMonth, 0 };
         ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
@@ -275,6 +303,9 @@ public class EUExControl extends EUExBase {
                             jsCallback(CALLBACK_DATEPICKERWITHOUTDAY,
                                     0, EUExCallback.F_C_JSON,
                                     jsonObject.toString());
+                            if (null != openDatePickerWithoutDayFuncId) {
+                                callbackToJs(Integer.parseInt(openDatePickerWithoutDayFuncId), false, jsonObject);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -311,7 +342,7 @@ public class EUExControl extends EUExBase {
 
     public void openTimePicker(String[] params) {
         int inHour, inMinute = 0;
-        if (params.length == 2) {
+        if (params.length >= 2) {
             try {
                 inHour = Integer.parseInt(params[0].trim());
                 inMinute = Integer.parseInt(params[1].trim());
@@ -327,7 +358,9 @@ public class EUExControl extends EUExBase {
             inHour = calendar.get(Calendar.HOUR_OF_DAY);
             inMinute = calendar.get(Calendar.MINUTE);
         }
-        Log.i("time", "inHour=" + inHour + ",inMinute=" + inMinute);
+        if (params.length == 3) {
+            openTimePickerFuncId = params[2];
+        }
         final int[] timeSet = new int[] { inHour, inMinute };
         ((Activity) mContext).runOnUiThread(new Runnable() {
 
@@ -349,6 +382,9 @@ public class EUExControl extends EUExBase {
                             jsCallback(CALLBACK_TIMEPICKER, 0,
                                     EUExCallback.F_C_JSON,
                                     jsonObject.toString());
+                            if (null != openTimePickerFuncId) {
+                                callbackToJs(Integer.parseInt(openTimePickerFuncId), false, jsonObject);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -373,8 +409,17 @@ public class EUExControl extends EUExBase {
         final String inputHint = params[1];
         final String btnText = params[2];
         final int finalInputType = inputType;
-        if (params.length == 4) {
-            parmBg = params[3];
+        if (params.length >= 4) {
+            try {
+                String str = params[3]; //如果第四个参数传的是回调函数
+                Integer.parseInt(str);
+                openInputDialogFuncId = str;
+            } catch (NumberFormatException e) {
+                parmBg = params[3];
+            }
+            if (params.length == 5) {
+                openInputDialogFuncId = params[4];
+            }
             Log.i("openInputDialog", parmBg);
         }
 
@@ -392,6 +437,9 @@ public class EUExControl extends EUExBase {
                                 jsCallback(CALLBACK_INPUTDIALOG, 0,
                                         EUExCallback.F_C_TEXT,
                                         dialog.getInputText());
+                                if(null != openInputDialogFuncId) {
+                                    callbackToJs(Integer.parseInt(openInputDialogFuncId), false, dialog.getInputText());
+                                }
                             }
                         }, getParm(parmBg));
             }
