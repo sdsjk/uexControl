@@ -115,6 +115,10 @@ public class ConfigLimitDatePickerDialog{
             mDatePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "完成", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // 某些手机手动输入时间后保存无效，需要释放焦点后才能正常保存
+                    if (dialog instanceof DatePickerDialog) {
+                        ((DatePickerDialog) dialog).getWindow().getDecorView().clearFocus();
+                    }
                     DatePicker datePicker = mDatePickerDialog.getDatePicker();
                     int year = 0;
                     int month = 0;
