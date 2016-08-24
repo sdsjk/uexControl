@@ -102,13 +102,10 @@ public class EUExControl extends EUExBase {
                                     monthOfYear + 1);
                             jsonObject.put(EUExCallback.F_JK_DAY,
                                     dayOfMonth);
-                            Log.i("jsonObject.toString()",
-                                    jsonObject.toString() + "----");
-                            jsCallback(CALLBACK_DATEPICKER, 0,
-                                    EUExCallback.F_C_JSON,
-                                    jsonObject.toString());
                             if (null != openDatePickerFuncId) {
                                 callbackToJs(Integer.parseInt(openDatePickerFuncId), false, jsonObject);
+                            } else {
+                                jsCallback(CALLBACK_DATEPICKER, 0, EUExCallback.F_C_JSON, jsonObject.toString());
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -239,8 +236,7 @@ public class EUExControl extends EUExBase {
 
             InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            callBackPluginJs(JsConst.CALLBACK_OPEN_DATE_PICKER_WITH_CONFIG,
-                    DataHelper.gson.toJson(result));
+
             if (null != openDatePickerWithConfigFuncId) {
                 String str = DataHelper.gson.toJson(result);
                 try {
@@ -249,6 +245,9 @@ public class EUExControl extends EUExBase {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else {
+                callBackPluginJs(JsConst.CALLBACK_OPEN_DATE_PICKER_WITH_CONFIG,
+                        DataHelper.gson.toJson(result));
             }
         }
     }
@@ -298,13 +297,12 @@ public class EUExControl extends EUExBase {
                                     .put(EUExCallback.F_JK_YEAR, year);
                             jsonObject.put(EUExCallback.F_JK_MONTH,
                                     monthOfYear + 1);
-                            Log.i("jsonObject.toString()",
-                                    jsonObject.toString() + "----");
-                            jsCallback(CALLBACK_DATEPICKERWITHOUTDAY,
-                                    0, EUExCallback.F_C_JSON,
-                                    jsonObject.toString());
                             if (null != openDatePickerWithoutDayFuncId) {
                                 callbackToJs(Integer.parseInt(openDatePickerWithoutDayFuncId), false, jsonObject);
+                            } else {
+                                jsCallback(CALLBACK_DATEPICKERWITHOUTDAY,
+                                        0, EUExCallback.F_C_JSON,
+                                        jsonObject.toString());
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -379,11 +377,13 @@ public class EUExControl extends EUExBase {
                                     hourOfDay);
                             jsonObject.put(EUExCallback.F_JK_MINUTE,
                                     minute);
-                            jsCallback(CALLBACK_TIMEPICKER, 0,
-                                    EUExCallback.F_C_JSON,
-                                    jsonObject.toString());
+
                             if (null != openTimePickerFuncId) {
                                 callbackToJs(Integer.parseInt(openTimePickerFuncId), false, jsonObject);
+                            } else {
+                                jsCallback(CALLBACK_TIMEPICKER, 0,
+                                        EUExCallback.F_C_JSON,
+                                        jsonObject.toString());
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -431,14 +431,15 @@ public class EUExControl extends EUExBase {
                         new OnInputFinishCallback() {
                             @Override
                             public void onInputFinish(InputDialog dialog) {
-                                jsCallback(CALLBACK_INPUT_COMPLETED, 0,
-                                        EUExCallback.F_C_TEXT,
-                                        dialog.getInputText());
-                                jsCallback(CALLBACK_INPUTDIALOG, 0,
-                                        EUExCallback.F_C_TEXT,
-                                        dialog.getInputText());
                                 if(null != openInputDialogFuncId) {
                                     callbackToJs(Integer.parseInt(openInputDialogFuncId), false, dialog.getInputText());
+                                } else {
+                                    jsCallback(CALLBACK_INPUT_COMPLETED, 0,
+                                            EUExCallback.F_C_TEXT,
+                                            dialog.getInputText());
+                                    jsCallback(CALLBACK_INPUTDIALOG, 0,
+                                            EUExCallback.F_C_TEXT,
+                                            dialog.getInputText());
                                 }
                             }
                         }, getParm(parmBg));
