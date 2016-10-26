@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import org.zywx.wbpalmstar.base.BDebug;
+
 public class OverwriteDatePickerDialog extends DatePickerDialog {
 
     private OnDateSetListener mListener;
@@ -25,37 +27,36 @@ public class OverwriteDatePickerDialog extends DatePickerDialog {
 
     @Override
     public void onDateChanged(DatePicker view, int year, int month, int day) {
-        //针对5.0以上系统，采用系统默认的ui.
-        if (Build.VERSION.SDK_INT >= 21) {
-            super.onDateChanged(view, year, month, day);
-            return;
-        }
-        DatePicker dp = getDatePicker();
-        if (dp != null) {
-            ViewGroup pickerView = (ViewGroup) ((ViewGroup) dp.getChildAt(0)).getChildAt(0);
-            for (int i = 0; i < pickerView.getChildCount(); i++){
-                ViewGroup item = (ViewGroup) pickerView.getChildAt(i);
-                for (int j = 0; j < item.getChildCount(); j++){
-                    View childView = item.getChildAt(j);
-                    if (childView instanceof EditText){
-                        EditText editText = (EditText) childView;
-                        String content = editText.getText().toString();
-                        if (TextUtils.isEmpty(content)){
-                            switch (i){
-                                case 0://year
-                                    editText.setText(String.valueOf(year));
-                                    break;
-                                case 1://month
-                                    editText.setText(String.valueOf(month + 1));
-                                    break;
-                                case 2://day
-                                    editText.setText(String.valueOf(day));
-                                    break;
+        try {
+            DatePicker dp = getDatePicker();
+            if (dp != null) {
+                ViewGroup pickerView = (ViewGroup) ((ViewGroup) dp.getChildAt(0)).getChildAt(0);
+                for (int i = 0; i < pickerView.getChildCount(); i++) {
+                    ViewGroup item = (ViewGroup) pickerView.getChildAt(i);
+                    for (int j = 0; j < item.getChildCount(); j++) {
+                        View childView = item.getChildAt(j);
+                        if (childView instanceof EditText) {
+                            EditText editText = (EditText) childView;
+                            String content = editText.getText().toString();
+                            if (TextUtils.isEmpty(content)) {
+                                switch (i) {
+                                    case 0://year
+                                        editText.setText(String.valueOf(year));
+                                        break;
+                                    case 1://month
+                                        editText.setText(String.valueOf(month + 1));
+                                        break;
+                                    case 2://day
+                                        editText.setText(String.valueOf(day));
+                                        break;
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (Exception e) {
+            BDebug.e(e);
         }
         super.onDateChanged(view, year, month, day);
     }

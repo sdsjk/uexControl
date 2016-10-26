@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <uexplugins>
     <plugin
-        uexName="uexControl" version="3.0.10" build="10">
-        <info>10:修复某些手机手动输入时间后保存无效问题</info>
+        uexName="uexControl" version="3.0.11" build="11">
+        <info>11:修复在高版本手机上选择日期时的crash问题</info>
+        <build>10:修复某些手机手动输入时间后保存无效问题</build>
         <build>9:修复在华为系列平板上因中文crash问题</build>
         <build>8:修复在Android 5.0以上版本选择日期时的crash问题</build>
         <build>7:修复日期不在范围内时，点击“确定”按钮能获取日期的问题</build>
