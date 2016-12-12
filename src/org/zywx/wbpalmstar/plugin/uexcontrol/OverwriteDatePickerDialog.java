@@ -3,7 +3,6 @@ package org.zywx.wbpalmstar.plugin.uexcontrol;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;

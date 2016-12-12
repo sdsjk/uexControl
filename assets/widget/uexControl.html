@@ -38,7 +38,7 @@
               default:
                 alert("error");
                 }
-            
+
         };
         uexControl.cbOpenDatePickerWithoutDay=function(opCode,dataType,data){
             switch(dataType){
@@ -56,7 +56,7 @@
                 break;
               default:
                 alert("error");
-                }    
+                }
         };
         uexControl.cbOpenTimePicker=function(opCode,dataType,data){
             switch(dataType){
@@ -66,7 +66,7 @@
                 case cJson:
                   if(dataType==1){
                     var obj = eval('('+data+')');
-                    document.getElementById('systime').innerHTML ="小时：" +obj.hour+"<br>分钟："+obj.minute+"<br>";    
+                    document.getElementById('systime').innerHTML ="小时：" +obj.hour+"<br>分钟："+obj.minute+"<br>";
                 }
                 break;
               case cInt:
@@ -75,7 +75,7 @@
               default:
                 alert("error");
                 }
-            
+
         };
         uexControl.cbOpenInputDialog=function(opCode,dataType,data){
             switch(dataType){
@@ -100,14 +100,18 @@
            alert(data);
        }
     }
-        
+
+    var commonCallback = function(data) {
+        alert("4.0 callback:" + JSON.stringify(data));
+    }
     function inputdlg(){
         var inputdlgT=document.getElementById('inputdlgType').value;
         var inputdlgD=document.getElementById('inputdlgData').value;
         var inputdlgB=document.getElementById('inputdlgBtn').value;
         var bgParm1='{"dialogBg":"#ffffff","dialogETBg":"res://plugin_uexcontrol_edittext_bg.png","dialogButBg":"res://plugin_uexcontrol_button.png"}';
-        setTimeout(function(){uexControl.openInputDialog(inputdlgT,inputdlgD,inputdlgB,bgParm1);},100);
+        uexControl.openInputDialog(inputdlgT,inputdlgD,inputdlgB, commonCallback);
     }
+
 
     function openDatePickerWithConfig(){
         var params = {
@@ -125,7 +129,7 @@
             }
         }
         var data = JSON.stringify(params);
-        uexControl.openDatePickerWithConfig(data);
+        uexControl.openDatePickerWithConfig(data, commonCallback);
     }
     </script>
 </head>
@@ -137,19 +141,19 @@
         年份：<input class="textbox" type="text" value="" id="addYear"><br>
         月份：<input class="textbox" type="text" value="" id="addMonth"><br>
         天数：<input class="textbox" type="text" value="" id="addDay"><br>
-        <input class="btn" type="button" value="打开日期" onclick="uexControl.openDatePicker(document.getElementById('addYear').value,document.getElementById('addMonth').value,document.getElementById('addDay').value);">
+        <input class="btn" type="button" value="打开日期" onclick="uexControl.openDatePicker(document.getElementById('addYear').value,document.getElementById('addMonth').value,document.getElementById('addDay').value, commonCallback);">
         <span>日期为：</span>
         <div class="tcxx" id="date"></div>
         <span>2.打开年月</span>
         年份：<input class="textbox" type="text" value="1900" id="year"><br>
         月份：<input class="textbox" type="text" value="10" id="month"><br>
-        <input class="btn" type="button" value="打开年月" onclick="uexControl.openDatePickerWithoutDay(document.getElementById('year').value,document.getElementById('month').value);">
+        <input class="btn" type="button" value="打开年月" onclick="uexControl.openDatePickerWithoutDay(document.getElementById('year').value,document.getElementById('month').value, commonCallback);">
         <span>年月为：</span>
         <div class="tcxx" id="yearAndMonth"></div>
         <span>3.打开时间</span>
         小时：<input class="textbox" type="text" value="10" id="addHour"><br>
         分钟：<input class="textbox" type="text" value="10" id="addMinute"><br>
-        <input class="btn" type="button" value="打开时间" onclick="uexControl.openTimePicker(document.getElementById('addHour').value,document.getElementById('addMinute').value);">
+        <input class="btn" type="button" value="打开时间" onclick="uexControl.openTimePicker(document.getElementById('addHour').value,document.getElementById('addMinute').value, commonCallback);">
 
         <span>时间为：</span>
         <div class="tcxx" id="systime"></div>
