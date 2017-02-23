@@ -1,7 +1,5 @@
 package org.zywx.wbpalmstar.plugin.uexcontrol;
 
-import android.text.TextUtils;
-
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.DateBaseVO;
 
 import java.util.Calendar;
@@ -16,8 +14,7 @@ public class ControlUtil {
     }
 
     public static boolean isAbsoluteDateValid(DateBaseVO date){
-        if (TextUtils.isEmpty(date.getMonth()) || TextUtils.isEmpty(date.getYear()) ||
-                TextUtils.isEmpty(date.getDay()) || date.getFormatDay() < 1 ||
+        if (date.getFormatDay() < 1 ||
                 date.getFormatMonth() < 1 || date.getFormatYear() < 1){
             return false;
         }
@@ -25,10 +22,6 @@ public class ControlUtil {
     }
 
     public static boolean isRelativeDateValid(DateBaseVO date) {
-        if (TextUtils.isEmpty(date.getMonth()) && TextUtils.isEmpty(date.getYear()) &&
-                TextUtils.isEmpty(date.getDay())){
-            return false;
-        }
 //        if (Math.abs(date.getFormatDay()) > 30 || Math.abs(date.getFormatMonth()) > 11){
 //            return false;
 //        }
@@ -39,16 +32,16 @@ public class ControlUtil {
         int convertYear = initDate.getFormatYear();
         int convertMonth = initDate.getFormatMonth();
         int convertDay = initDate.getFormatDay();
-        String limitYear = date.getYear();
-        String limitMonth = date.getMonth();
-        String limitDay = date.getDay();
+        int limitYear = date.getYear();
+        int limitMonth = date.getMonth();
+        int limitDay = date.getDay();
         Calendar calendar = Calendar.getInstance();
         calendar.set(convertYear, convertMonth - 1, convertDay);
-        if (!TextUtils.isEmpty(limitDay)){
+        if (limitDay!=0){
             calendar.add(Calendar.DAY_OF_MONTH, date.getFormatDay());
-        }else if(!TextUtils.isEmpty(limitMonth)){
+        }else if(limitMonth!=0){
             calendar.add(Calendar.MONTH, date.getFormatMonth());
-        }else if (!TextUtils.isEmpty(limitYear)){
+        }else if (limitYear!=0){
             calendar.add(Calendar.YEAR, date.getFormatYear());
         }
         return calendar.getTimeInMillis();

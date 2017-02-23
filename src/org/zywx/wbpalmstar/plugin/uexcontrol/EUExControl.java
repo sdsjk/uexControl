@@ -131,9 +131,9 @@ public class EUExControl extends EUExBase {
         }
         DateBaseVO initDate = new DateBaseVO();
         Calendar calendar = Calendar.getInstance();
-        initDate.setYear(calendar.get(Calendar.YEAR) + "");
-        initDate.setMonth(calendar.get(Calendar.MONTH) + "");
-        initDate.setDay(calendar.get(Calendar.DAY_OF_MONTH) + "");
+        initDate.setYear(calendar.get(Calendar.YEAR));
+        initDate.setMonth(calendar.get(Calendar.MONTH));
+        initDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
         String json = params[0];
         DatePickerConfigVO dataVO = DataHelper.gson.fromJson(json, DatePickerConfigVO.class);
         if (dataVO != null){
