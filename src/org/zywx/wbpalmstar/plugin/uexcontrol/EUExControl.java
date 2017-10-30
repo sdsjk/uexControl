@@ -262,7 +262,7 @@ public class EUExControl extends EUExBase {
         if (params.length >= 2) {
             try {
                 inYear = Integer.parseInt(params[0].trim());
-                inMonth = Integer.parseInt(params[1].trim());
+                inMonth = Integer.parseInt(params[1].trim()) - 1;
                 Log.i("date", "inYear1=" + inYear + ",inMonth1=" + inMonth);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -279,7 +279,7 @@ public class EUExControl extends EUExBase {
         if (params.length == 3) {
             openDatePickerWithoutDayFuncId = params[2];
         }
-        final int[] dateSet = new int[] { inYear, inMonth, 0 };
+        final int[] dateSet = new int[] { inYear, inMonth, 1 };
         ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -310,29 +310,15 @@ public class EUExControl extends EUExBase {
                     }
                 }, dateSet[0], dateSet[1], dateSet[2]);
                 datePickerWithoutDayDialog.setCancelable(true);
-                int year = dateSet[0], month = dateSet[1];
-                if (month > 12) {
-                    year = year + month / 12;
-                    month = month % 12;
-                    if (month == 0) {
-                        month = 12;
-                        year = year - 1;
-                    }
-                }
-                if (year < 1900) {
-                    year = 1900;
-                    month = 01;
-                }
-                if (year > 2100) {
-                    year = 2100;
-                    month = 12;
-                }
-                datePickerWithoutDayDialog.setTitle(year + "-" + month);
+                // init title
+                datePickerWithoutDayDialog.setTitle(dateSet[0] + "-" + dateSet[1]);
                 datePickerWithoutDayDialog.show();
                 DatePicker dp = datePickerWithoutDayDialog.getDatePicker();
                 if (dp != null) {
                     ((ViewGroup) ((ViewGroup) dp.getChildAt(0)).getChildAt(0))
                             .getChildAt(2).setVisibility(View.GONE);
+                    // reset title
+                    datePickerWithoutDayDialog.setTitle(dp.getYear() + "-" + (dp.getMonth() + 1));
                 }
             }
         });
