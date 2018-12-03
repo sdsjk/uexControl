@@ -280,11 +280,15 @@ public class EUExControl extends EUExBase {
             openDatePickerWithoutDayFuncId = params[2];
         }
         final int[] dateSet = new int[] { inYear, inMonth, 1 };
+        /**
+         *  固定DatePickerDialog的样式是不会跟随系统变化而不同
+         *  具体参考https://blog.csdn.net/suwenlai/article/details/71107748
+         */
         ((Activity) mContext).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 OverwriteDatePickerWithoutDayDialog datePickerWithoutDayDialog = new OverwriteDatePickerWithoutDayDialog(
-                        mContext, new DatePickerDialog.OnDateSetListener() {
+                        mContext, DatePickerDialog.THEME_TRADITIONAL,new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {

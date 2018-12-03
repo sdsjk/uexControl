@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <uexplugins>
     <plugin
-        uexName="uexControl" version="4.0.2" build="2">
-        <info>2:修复openDatePickerWithoutDay接口默认时间错误和title显示错误的问题</info>
+        uexName="uexControl" version="4.0.3" build="3">
+        <info>3:修复dataPickDialog样式不会跟随系统所变化</info>
+        <build>2:修复openDatePickerWithoutDay接口默认时间错误和title显示错误的问题</build>
         <build>1:修复openDatePickerWithConfig</build>
         <build>0:时间日期选择功能插件</build>
     </plugin>

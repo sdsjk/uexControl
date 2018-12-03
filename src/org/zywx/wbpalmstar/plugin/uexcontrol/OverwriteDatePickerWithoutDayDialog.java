@@ -14,9 +14,9 @@ public class OverwriteDatePickerWithoutDayDialog extends DatePickerDialog {
 
     private OnDateSetListener mListener;
 
-	public OverwriteDatePickerWithoutDayDialog(Context context,
+	public OverwriteDatePickerWithoutDayDialog(Context context,int style,
 			OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {
-		super(context, callBack, year, monthOfYear, dayOfMonth);
+		super(context,style, callBack, year, monthOfYear, dayOfMonth);
         this.mListener = callBack;
 	}
 
