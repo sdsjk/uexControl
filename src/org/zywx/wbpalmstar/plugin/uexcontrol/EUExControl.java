@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import org.zywx.wbpalmstar.plugin.uexcontrol.vo.ResultDatePickerBaseVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.ResultDatePickerVO;
 import org.zywx.wbpalmstar.plugin.uexcontrol.vo.ResultOnErrorVO;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 
 public class EUExControl extends EUExBase {
@@ -319,13 +322,51 @@ public class EUExControl extends EUExBase {
                 datePickerWithoutDayDialog.show();
                 DatePicker dp = datePickerWithoutDayDialog.getDatePicker();
                 if (dp != null) {
-                    ((ViewGroup) ((ViewGroup) dp.getChildAt(0)).getChildAt(0))
-                            .getChildAt(2).setVisibility(View.GONE);
+//                        ((ViewGroup) ((ViewGroup) dp.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
+
+                    hideDay(dp);
                     // reset title
                     datePickerWithoutDayDialog.setTitle(dp.getYear() + "-" + (dp.getMonth() + 1));
                 }
             }
         });
+    }
+
+    /**
+     * 隐藏“天”
+     * @param mDatePicker
+     */
+    private void hideDay(DatePicker mDatePicker) {
+        try {
+           /* 处理android5.0以上的特殊情况 */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
+                if (daySpinnerId != 0) {
+                    View daySpinner = mDatePicker.findViewById(daySpinnerId);
+                    if (daySpinner != null) {
+                        daySpinner.setVisibility(View.GONE);
+                    }
+                }
+            } else {
+                Field[] datePickerfFields = mDatePicker.getClass().getDeclaredFields();
+                for (Field datePickerField : datePickerfFields) {
+                    if ("mDaySpinner".equals(datePickerField.getName()) || ("mDayPicker").equals(datePickerField.getName())) {
+                        datePickerField.setAccessible(true);
+                        Object dayPicker = new Object();
+                        try {
+                            dayPicker = datePickerField.get(mDatePicker);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        }
+                        ((View) dayPicker).setVisibility(View.GONE);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void openTimePicker(String[] params) {

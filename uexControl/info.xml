@@ -3,6 +3,7 @@
     <plugin
         uexName="uexControl" version="4.0.3" build="3">
         <info>3:修复dataPickDialog样式不会跟随系统所变化</info>
+        <build>3:修复openDatePickerWithoutDay接口日期显示NullPotion</build>
         <build>2:修复openDatePickerWithoutDay接口默认时间错误和title显示错误的问题</build>
         <build>1:修复openDatePickerWithConfig</build>
         <build>0:时间日期选择功能插件</build>
